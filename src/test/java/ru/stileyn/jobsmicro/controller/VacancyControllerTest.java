@@ -6,7 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.stileyn.jobsmicro.dto.VacancyDTO;
+import ru.stileyn.jobsmicro.dto.VacancyDto;
 import ru.stileyn.jobsmicro.service.VacancyService;
 
 import java.util.Collections;
@@ -27,10 +27,10 @@ class VacancyControllerTest {
 
     @Test
     void testGetAllVacancies() throws Exception {
-        VacancyDTO vacancyDTO = new VacancyDTO();
-        vacancyDTO.setId(1L);
+        VacancyDto VacancyDto = new VacancyDto();
+        VacancyDto.setId(1L);
 
-        when(vacancyService.getAllVacancies()).thenReturn(Collections.singletonList(vacancyDTO));
+        when(vacancyService.getAllVacancies()).thenReturn(Collections.singletonList(VacancyDto));
 
         mockMvc.perform(get("/api/vacancies")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -43,10 +43,10 @@ class VacancyControllerTest {
 
     @Test
     void testCreateVacancy() throws Exception {
-        VacancyDTO vacancyDTO = new VacancyDTO();
-        vacancyDTO.setId(1L);
+        VacancyDto VacancyDto = new VacancyDto();
+        VacancyDto.setId(1L);
 
-        when(vacancyService.createVacancy(any(VacancyDTO.class))).thenReturn(vacancyDTO);
+        when(vacancyService.createVacancy(any(VacancyDto.class))).thenReturn(VacancyDto);
 
         mockMvc.perform(post("/api/vacancies")
                         .content("{}")
@@ -55,7 +55,7 @@ class VacancyControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1));
 
-        verify(vacancyService, times(1)).createVacancy(any(VacancyDTO.class));
+        verify(vacancyService, times(1)).createVacancy(any(VacancyDto.class));
     }
 
     // Другие тесты для обновления, удаления вакансий и т.д.

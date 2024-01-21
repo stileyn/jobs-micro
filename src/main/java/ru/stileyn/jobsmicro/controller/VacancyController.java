@@ -1,9 +1,10 @@
 package ru.stileyn.jobsmicro.controller;
 
-import ru.stileyn.jobsmicro.dto.VacancyDTO;
+import ru.stileyn.jobsmicro.dto.VacancyDto;
 import ru.stileyn.jobsmicro.service.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -18,14 +19,27 @@ public class VacancyController {
     }
 
     @GetMapping
-    public List<VacancyDTO> getAllVacancies() {
+    public List<VacancyDto> getAllVacancies() {
         return vacancyService.getAllVacancies();
     }
 
-    @PostMapping
-    public VacancyDTO createVacancy(@RequestBody VacancyDTO vacancyDTO) {
-        return vacancyService.createVacancy(vacancyDTO);
+    @GetMapping("/{id}")
+    public VacancyDto getVacancyById(@PathVariable Long id) {
+        return vacancyService.getVacancyById(id);
     }
 
-    // Другие методы для обновления, удаления вакансий и т.д.
+    @PostMapping
+    public VacancyDto createVacancy(@RequestBody VacancyDto VacancyDto) {
+        return vacancyService.createVacancy(VacancyDto);
+    }
+
+    @PutMapping("/{id}")
+    public VacancyDto updateVacancy(@PathVariable Long id, @RequestBody VacancyDto VacancyDto) {
+        return vacancyService.updateVacancy(id, VacancyDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteVacancy(@PathVariable Long id) {
+        vacancyService.deleteVacancy(id);
+    }
 }

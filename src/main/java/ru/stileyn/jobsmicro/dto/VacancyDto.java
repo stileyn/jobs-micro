@@ -3,7 +3,7 @@ package ru.stileyn.jobsmicro.dto;
 import lombok.Data;
 
 @Data
-public class VacancyDTO {
+public class VacancyDto {
     private Long id;
     private String title;
     private String description;

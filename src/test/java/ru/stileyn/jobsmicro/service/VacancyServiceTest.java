@@ -1,14 +1,15 @@
 package ru.stileyn.jobsmicro.service;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import ru.stileyn.jobsmicro.dto.VacancyDTO;
+import ru.stileyn.jobsmicro.dto.VacancyDto;
 import ru.stileyn.jobsmicro.entity.Vacancy;
 import ru.stileyn.jobsmicro.mapper.VacancyMapper;
 import ru.stileyn.jobsmicro.repository.VacancyRepository;
-
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -28,28 +29,31 @@ class VacancyServiceTest {
     void testGetAllVacancies() {
         Vacancy vacancy = new Vacancy();
         vacancy.setId(1L);
-        VacancyDTO vacancyDTO = new VacancyDTO();
-        vacancyDTO.setId(1L);
+        VacancyDto VacancyDto = new VacancyDto();
+        VacancyDto.setId(1L);
 
-        when(vacancyRepository.findAll()).thenReturn(Collections.singletonList(vacancy));
-        when(vacancyMapper.vacancyToVacancyDTO(vacancy)).thenReturn(vacancyDTO);
+        List<Vacancy> vacancies = Collections.singletonList(vacancy);
+        List<VacancyDto> VacancyDtos = Collections.singletonList(VacancyDto);
 
-        assertEquals(Collections.singletonList(vacancyDTO), vacancyService.getAllVacancies());
+        when(vacancyRepository.findAll()).thenReturn(vacancies);
+        when(vacancyMapper.vacanciesToVacancyDtos(vacancies)).thenReturn(VacancyDtos);
+
+        assertEquals(VacancyDtos, vacancyService.getAllVacancies());
         verify(vacancyRepository, times(1)).findAll();
     }
 
     @Test
     void testCreateVacancy() {
-        VacancyDTO vacancyDTO = new VacancyDTO();
-        vacancyDTO.setId(1L);
+        VacancyDto VacancyDto = new VacancyDto();
+        VacancyDto.setId(1L);
         Vacancy vacancy = new Vacancy();
         vacancy.setId(1L);
 
-        when(vacancyMapper.vacancyDTOToVacancy(vacancyDTO)).thenReturn(vacancy);
+        when(vacancyMapper.VacancyDtoToVacancy(VacancyDto)).thenReturn(vacancy);
         when(vacancyRepository.save(vacancy)).thenReturn(vacancy);
-        when(vacancyMapper.vacancyToVacancyDTO(vacancy)).thenReturn(vacancyDTO);
+        when(vacancyMapper.vacancyToVacancyDto(vacancy)).thenReturn(VacancyDto);
 
-        assertEquals(vacancyDTO, vacancyService.createVacancy(vacancyDTO));
+        assertEquals(VacancyDto, vacancyService.createVacancy(VacancyDto));
         verify(vacancyRepository, times(1)).save(vacancy);
     }
 

@@ -1,13 +1,14 @@
 package ru.stileyn.jobsmicro.service;
 
-import ru.stileyn.jobsmicro.dto.VacancyDTO;
+import ru.stileyn.jobsmicro.dto.VacancyDto;
 import ru.stileyn.jobsmicro.entity.Vacancy;
 import ru.stileyn.jobsmicro.mapper.VacancyMapper;
 import ru.stileyn.jobsmicro.repository.VacancyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class VacancyService {
@@ -21,18 +22,36 @@ public class VacancyService {
         this.vacancyMapper = vacancyMapper;
     }
 
-    public List<VacancyDTO> getAllVacancies() {
+    public List<VacancyDto> getAllVacancies() {
         List<Vacancy> vacancies = vacancyRepository.findAll();
-        return vacancies.stream()
-                .map(vacancyMapper::vacancyToVacancyDTO)
-                .collect(Collectors.toList());
+        return vacancyMapper.vacanciesToVacancyDtos(vacancies);
     }
 
-    public VacancyDTO createVacancy(VacancyDTO vacancyDTO) {
-        Vacancy vacancy = vacancyMapper.vacancyDTOToVacancy(vacancyDTO);
+    public VacancyDto getVacancyById(Long id) {
+        Optional<Vacancy> optionalVacancy = vacancyRepository.findById(id);
+        return optionalVacancy.map(vacancyMapper::vacancyToVacancyDto).orElse(null);
+    }
+
+    public VacancyDto createVacancy(VacancyDto VacancyDto) {
+        Vacancy vacancy = vacancyMapper.VacancyDtoToVacancy(VacancyDto);
         Vacancy savedVacancy = vacancyRepository.save(vacancy);
-        return vacancyMapper.vacancyToVacancyDTO(savedVacancy);
+        return vacancyMapper.vacancyToVacancyDto(savedVacancy);
     }
 
-    // Другие методы для обновления, удаления вакансий и т.д.
+    public VacancyDto updateVacancy(Long id, VacancyDto VacancyDto) {
+        Optional<Vacancy> optionalVacancy = vacancyRepository.findById(id);
+
+        if (optionalVacancy.isPresent()) {
+            Vacancy existingVacancy = optionalVacancy.get();
+            existingVacancy.setTitle(VacancyDto.getTitle()); // Обновите другие поля по необходимости
+            Vacancy updatedVacancy = vacancyRepository.save(existingVacancy);
+            return vacancyMapper.vacancyToVacancyDto(updatedVacancy);
+        }
+
+        return null; // или выбросьте исключение, если необходимо
+    }
+
+    public void deleteVacancy(Long id) {
+        vacancyRepository.deleteById(id);
+    }
 }

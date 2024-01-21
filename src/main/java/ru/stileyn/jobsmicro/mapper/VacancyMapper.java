@@ -1,11 +1,14 @@
 package ru.stileyn.jobsmicro.mapper;
 
-import ru.stileyn.jobsmicro.dto.VacancyDTO;
+import ru.stileyn.jobsmicro.dto.VacancyDto;
 import ru.stileyn.jobsmicro.entity.Vacancy;
 import org.mapstruct.Mapper;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface VacancyMapper {
-    VacancyDTO vacancyToVacancyDTO(Vacancy vacancy);
-    Vacancy vacancyDTOToVacancy(VacancyDTO vacancyDTO);
+    VacancyDto vacancyToVacancyDto(Vacancy vacancy);
+    Vacancy VacancyDtoToVacancy(VacancyDto VacancyDto);
+
+    List<VacancyDto> vacanciesToVacancyDtos(List<Vacancy> vacancies);
 }
